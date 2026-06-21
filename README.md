@@ -25,7 +25,7 @@ This repository documents two stages of a portfolio project:
 ### Issues & Solutions
 - **Couldn't find the Extensions panel at first.** Cursor opened in the Agent Window, which hides the editor sidebar. Switched to the Editor Window, then opened Extensions via `View → Extensions`.
 - **Both extensions installed but not logged in.** Used the Command Palette (`Ctrl+Shift+P`) to open each extension's sidebar and signed in to both.
-- **YouTube transcript fetching needed the right library.** Used Claude Code to set up `youtube-transcript-api` in a Python script and iterate when some videos had transcripts disabled (handled gracefully with try/except and a skipped-videos log).
+- **YouTube IP-blocked the transcript scraper.** The first approach used the `youtube-transcript-api` Python library, which scrapes YouTube's InnerTube endpoint from the local machine. Every request came back `RequestBlocked` — YouTube IP-blocks transcript requests from this network (confirmed across multiple attempts, including a delayed retry; the channel RSS feeds were unaffected). **Fix:** switched transcript collection to the [Supadata](https://supadata.ai) API, which fetches server-side, so the local IP block doesn't apply. All 18/18 transcripts then fetched successfully. (A first Supadata run hit a Cloudflare `1010` block on the default `Python-urllib` User-Agent — fixed by sending a browser User-Agent.)
 
 ---
 
@@ -61,7 +61,7 @@ I deliberately excluded high-follower generalists and "YouTube automation" creat
 ```
 
 ### How content was collected
-- **YouTube transcripts:** fetched programmatically with `youtube-transcript-api` (see `/scripts/fetch_transcripts.py`), driven by Claude Code.
+- **YouTube transcripts:** fetched programmatically via the [Supadata](https://supadata.ai) transcript API (`GET /v1/transcript`) using [`/scripts/fetch_transcripts.py`](scripts/fetch_transcripts.py), driven by Claude Code. The 18 source videos (3 each for the 6 authors with channels) are listed in [`/scripts/channels.json`](scripts/channels.json); their IDs were pulled straight from each channel's YouTube RSS feed, so every ID is genuine. The script reads the API key from `SUPADATA_API_KEY` (env var or a gitignored `.env`), polls Supadata's async job endpoint for long videos, and logs any video without a transcript to a gitignored `_skipped.log`. Supadata replaced an initial `youtube-transcript-api` attempt that YouTube IP-blocked (see Issues above).
 - **LinkedIn posts:** collected manually per each author's recent activity (in line with LinkedIn's terms of service) and saved as Markdown, one folder per author.
 - **Other materials:** key articles, case studies, and frameworks saved/linked under `/research/other`.
 
