@@ -55,7 +55,7 @@ Roster composition (as planned): ~5 operators with visible results, ~4 technical
 - **Content focus:** AI content optimization tooling, content strategy research, AI search.
 
 ### 7. Jori Ford — Co-founder, Octopus Labs
-- **LinkedIn:** https://www.linkedin.com/in/joriford (search-resolved; verify on first visit)
+- **LinkedIn:** https://www.linkedin.com/in/chicagoseopro/ (search-resolved; verify on first visit)
 - **YouTube:** Conference talks (Tech SEO Connect, SEO Week) rather than a dedicated channel
 - **Why chosen:** Software-engineering background applied to technical SEO. Developed "Hybrid Engine Optimization" and runs empirical crawl-log experiments on how AI/LLM bots actually interact with sites. Former Director of SEO at Conductor. Highly technical, evidence-first.
 - **Content focus:** AI crawler analysis, log-file-based research, technical SEO for AI agents.
