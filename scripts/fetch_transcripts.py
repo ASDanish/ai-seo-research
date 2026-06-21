@@ -36,6 +36,7 @@ import json
 import os
 import re
 import time
+import unicodedata
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -71,6 +72,9 @@ def load_dotenv() -> None:
 
 
 def slugify(text: str) -> str:
+    # Fold accented characters to ASCII (e.g. "Gübür" -> "gubur") so folder and
+    # file names are consistent and portable.
+    text = unicodedata.normalize("NFKD", text).encode("ascii", "ignore").decode()
     text = re.sub(r"[^\w\s-]", "", text).strip().lower()
     return re.sub(r"[\s_-]+", "-", text)[:80]
 
