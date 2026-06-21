@@ -31,6 +31,7 @@ from pathlib import Path
 try:
     from youtube_transcript_api import YouTubeTranscriptApi
     from youtube_transcript_api._errors import (
+        CouldNotRetrieveTranscript,
         TranscriptsDisabled,
         NoTranscriptFound,
         VideoUnavailable,
@@ -62,8 +63,12 @@ def fetch_one(entry: dict) -> bool:
     out_path = author_dir / f"{slugify(title)}.md"
 
     try:
-        segments = YouTubeTranscriptApi.get_transcript(video_id)
+        # youtube-transcript-api >= 1.0 uses an instance-based API.
+        segments = YouTubeTranscriptApi().fetch(video_id).to_raw_data()
     except (TranscriptsDisabled, NoTranscriptFound, VideoUnavailable) as e:
+        log_skip(entry, type(e).__name__)
+        return False
+    except CouldNotRetrieveTranscript as e:  # IP block, request blocked, etc.
         log_skip(entry, type(e).__name__)
         return False
     except Exception as e:  # network / unexpected
